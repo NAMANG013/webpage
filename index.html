@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Dashboard</title>
+    <style>
+        :root {
+            /* Dark Mode (Default) */
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent: #818cf8;
+            /* Indigo-400 */
+            --accent-glow: rgba(129, 140, 248, 0.2);
+            --glass-blur: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(0, 0, 0, 0.05);
+            --accent: #4f46e5;
+            /* Indigo-600 */
+            --accent-glow: rgba(79, 70, 229, 0.1);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen, ubuntu, cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.5s ease;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 10% 20%, var(--accent-glow) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, var(--accent-glow) 0%, transparent 40%);
+        }
+
+        /* Ambient Background shapes */
+        .ambient-shape {
+            position: fixed;
+            width: 60vw;
+            height: 60vw;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.03;
+            z-index: -1;
+            filter: blur(80px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            top: -20%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            bottom: -20%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(30px, 50px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* --- Theme Toggle --- */
+        .theme-toggle {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: var(--transition);
+            backdrop-filter: blur(var(--glass-blur));
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            margin-top: 4vh;
+        }
+
+        .greeting {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .clock-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        #clock {
+            font-size: 4rem;
+            font-weight: 200;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+
+        #date {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        #quote-input {
+            margin-top: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--accent);
+            text-align: center;
+            font-size: 1rem;
+            font-style: italic;
+            width: 100%;
+            outline: none;
+            opacity: 0.9;
+        }
+
+        /* --- Search --- */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 1rem 1.5rem 1rem 3.5rem;
+            /* Left padding for icon */
+            border-radius: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            backdrop-filter: blur(var(--glass-blur));
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .search-bar::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 0 0 2px var(--accent), var(--shadow);
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.01);
+        }
+
+        [data-theme="light"] .search-bar:focus {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* --- Quick Links Grid --- */
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .link-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: var(--transition);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            background: var(--card-bg);
+            border-color: var(--accent);
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-icon {
+            font-size: 32px;
+            color: currentColor;
+            transition: var(--transition);
+        }
+
+        .link-card:hover .link-icon {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .link-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* --- Productivity Section --- */
+        .productivity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .widget {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(var(--glass-blur));
+            display: flex;
+            flex-direction: column;
+        }
+
+        .widget h3 {
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Todo List */
+        .todo-input-form {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .todo-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        [data-theme="light"] .todo-input {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .todo-list {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+            max-height: 200px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--card-border);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .todo-item.completed span {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .todo-checkbox {
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .delete-todo {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        .todo-item:hover .delete-todo {
+            opacity: 1;
+        }
+
+        .delete-todo:hover {
+            color: #ef4444;
+        }
+
+        /* Notes & Focus */
+        .textarea-widget {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: var(--text-main);
+            resize: none;
+            font-family: inherit;
+            outline: none;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        [data-theme="light"] .textarea-widget {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .focus-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--accent);
+            padding: 0.5rem 0;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            text-align: center;
+            width: 100%;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .focus-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .focus-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem 0;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        /* --- Media Queries --- */
+        @media (max-width: 900px) {
+            .productivity-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .links-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .greeting {
+                font-size: 2rem;
+            }
+
+            #clock {
+                font-size: 3rem;
+            }
+
+            .container {
+                padding: 1rem;
+                gap: 2rem;
+            }
+        }
+    </style>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <div class="ambient-shape shape-1"></div>
+    <div class="ambient-shape shape-2"></div>
+    <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+        <!-- Sun Icon -->
+        <svg class="sun-icon" style="display: none;" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <!-- Moon Icon -->
+        <svg class="moon-icon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+    <div class="container">
+
+        <header>
+            <div class="greeting">Welcome back, Naman</div>
+            <div class="clock-container">
+                <div id="clock">00:00:00</div>
+                <div id="date">Loading date...</div>
+            </div>
+            <input type="text" id="quote-input" placeholder="Click to add a motivational quote..." spellcheck="false">
+        </header>
+        <section class="search-container">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="search-bar" id="search-bar" placeholder="Message google..." autocomplete="off"
+                autofocus>
+        </section>
+        <!-- Links Grid -->
+        <section>
+            <div class="section-title">Quick Links</div>
+            <div class="links-grid" id="links-grid">
+                <!-- Links will be populated by JS -->
+            </div>
+        </section>
+        <!-- Widgets -->
+        <!-- <section class="productivity-grid">
+
+            Focus Widget
+            <div class="widget">
+                <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg> Daily Focus</h3>
+                <div class="focus-wrapper">
+                    <p class="focus-label">What is your main goal for today?</p>
+                    <input type="text" class="focus-input" id="focus-input" placeholder="Enter goal...">
+                </div>
+            </div>
+odo Widget -->
+        <div class="widget">
+            <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 11 12 14 22 4"></polyline>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg> To-Do</h3>
+            <form class="todo-input-form" onsubmit="addTodo(event)">
+                <input type="text" class="todo-input" id="new-todo" placeholder="Add task...">
+            </form>
+            <ul class="todo-list" id="todo-list">
+                Todos go here
+            </ul>
+        </div>
+
+        <!-- <div class="widget">
+            <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg> Notepad</h3>
+            <textarea class="textarea-widget" id="notepad" placeholder="Quick notes..."></textarea>
+        </div> -->
+        </section>
+        <footer>
+            <p>&copy; <span id="year"></span> Naman. <span id="footer-quote">Design is intelligence made visible.</span>
+            </p>
+        </footer>
+    </div>
+    <script>
+        /* --- CONSTANTS & CONFIG --- */
+        const SOCIAL_LINKS = [
+            { title: "Instagram", url: "https://instagram.com", category: "social", iconClass: "bx bxl-instagram" },
+            { title: "X", url: "https://x.com", category: "social", iconClass: "bx bxl-twitter" }, // User asked for twitter-x but boxicons might use bxl-twitter or bxl-twitter with x specific class. Let's use bxl-twitter-x if exists or bxl-twitter. Checking user request: "bx-twitter-x" was in the prompt example.
+            { title: "LinkedIn", url: "https://linkedin.com", category: "social", iconClass: "bx bxl-linkedin" },
+            { title: "Gmail", url: "https://mail.google.com", category: "work", iconClass: "bx bxl-gmail" },
+            { title: "GitHub", url: "https://github.com", category: "work", iconClass: "bx bxl-github" },
+            { title: "ChatGPT", url: "https://chat.openai.com", category: "work", iconClass: "bx bxl-openai" },
+            { title: "YouTube", url: "https://youtube.com", category: "learning", iconClass: "bx bxl-youtube" },
+            { title: "Canva", url: "https://canva.com", category: "tools", iconClass: "bxl-canva" },
+        ];
+        /* --- STATE MANAGEMENT --- */
+        let todos = JSON.parse(localStorage.getItem('dashboard_todos')) || [];
+        let theme = localStorage.getItem('dashboard_theme') || 'dark';
+        /* --- INITIALIZATION --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            initClock();
+            initTheme();
+            renderLinks();
+            renderTodos();
+            loadNotesAndFocus();
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Search Listener
+            document.getElementById('search-bar').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = e.target.value;
+                    if (query) window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                }
+            });
+            // Keyboard Shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Focus search on '/'
+                if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    document.getElementById('search-bar').focus();
+                }
+            });
+            // Quote & Focus Inputs listeners
+            document.getElementById('quote-input').value = localStorage.getItem('dashboard_quote') || '';
+            document.getElementById('quote-input').addEventListener('input', (e) => localStorage.setItem('dashboard_quote', e.target.value));
+            document.getElementById('focus-input').addEventListener('input', (e) => localStorage.setItem('dashboard_focus', e.target.value));
+            document.getElementById('notepad').addEventListener('input', (e) => localStorage.setItem('dashboard_notes', e.target.value));
+        });
+        /* --- CLOCK & DATE --- */
+        function initClock() {
+            const update = () => {
+                const now = new Date();
+                document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour12: false });
+                document.getElementById('date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            };
+            update();
+            setInterval(update, 1000);
+        }
+        /* --- THEME --- */
+        function initTheme() {
+            document.documentElement.setAttribute('data-theme', theme);
+            updateThemeIcons();
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+        }
+        function toggleTheme() {
+            theme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('dashboard_theme', theme);
+            updateThemeIcons();
+        }
+        function updateThemeIcons() {
+            const sun = document.querySelector('.sun-icon');
+            const moon = document.querySelector('.moon-icon');
+            if (theme === 'dark') {
+                sun.style.display = 'block';
+                moon.style.display = 'none';
+            } else {
+                sun.style.display = 'none';
+                moon.style.display = 'block';
+            }
+        }
+        /* --- LINKS --- */
+        function renderLinks() {
+            const grid = document.getElementById('links-grid');
+            grid.innerHTML = SOCIAL_LINKS.map(link => `
+                <a href="${link.url}" class="link-card">
+                    <i class='link-icon ${link.iconClass}'></i>
+                    <span class="link-title">${link.title}</span>
+                </a>
+            `).join('');
+
+            // Allow adding a custom link via code comment instructions
+            // Users can edit the SOCIAL_LINKS array above.
+        }
+        /* --- TODOS --- */
+        function renderTodos() {
+            const list = document.getElementById('todo-list');
+            list.innerHTML = todos.map((todo, index) => `
+                <li class="todo-item ${todo.completed ? 'completed' : ''}">
+                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} onclick="toggleTodo(${index})">
+                    <span>${todo.text}</span>
+                    <button class="delete-todo" onclick="deleteTodo(${index})">&times;</button>
+                </li>
+            `).join('');
+            localStorage.setItem('dashboard_todos', JSON.stringify(todos));
+        }
+        function addTodo(e) {
+            e.preventDefault();
+            const input = document.getElementById('new-todo');
+            const text = input.value.trim();
+            if (text) {
+                todos.push({ text, completed: false });
+                input.value = '';
+                renderTodos();
+            }
+        }
+        function toggleTodo(index) {
+            todos[index].completed = !todos[index].completed;
+            renderTodos();
+        }
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            renderTodos();
+        }
+        /* --- NOTES & FOCUS --- */
+        function loadNotesAndFocus() {
+            document.getElementById('notepad').value = localStorage.getItem('dashboard_notes') || '';
+            document.getElementById('focus-input').value = localStorage.getItem('dashboard_focus') || '';
+        }
+    </script>
+</body>
+
+</html>
