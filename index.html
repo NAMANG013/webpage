@@ -4,97 +4,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Dashboard</title>
+    <title>Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Dark Mode (Default) */
-            --bg-color: #0f172a;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --accent: #818cf8;
-            /* Indigo-400 */
-            --accent-glow: rgba(129, 140, 248, 0.2);
-            --glass-blur: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-color: #0f0f11;
+            --text-color: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --accent: #aaddff;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         [data-theme="light"] {
-            --bg-color: #f1f5f9;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --card-border: rgba(0, 0, 0, 0.05);
-            --accent: #4f46e5;
-            /* Indigo-600 */
-            --accent-glow: rgba(79, 70, 229, 0.1);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+            --bg-color: #e0e5ec;
+            --text-color: #1a1a1a;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-hover: rgba(255, 255, 255, 0.6);
+            --accent: #0066cc;
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         body {
-            font-family: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen, ubuntu, cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-main);
+            color: var(--text-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: background-color 0.5s ease;
+            justify-content: center;
             overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 10% 20%, var(--accent-glow) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, var(--accent-glow) 0%, transparent 40%);
+            position: relative;
         }
 
-        /* Ambient Background shapes */
-        .ambient-shape {
+        /* Background Animation */
+        .bg-gradient {
             position: fixed;
-            width: 60vw;
-            height: 60vw;
-            border-radius: 50%;
-            background: var(--accent);
-            opacity: 0.03;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             z-index: -1;
-            filter: blur(80px);
-            animation: float 20s infinite ease-in-out;
+            background: radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.1), transparent 25%);
+            animation: pulse 10s ease-in-out infinite alternate;
         }
 
-        .shape-1 {
-            top: -20%;
-            left: -10%;
-            animation-delay: 0s;
-        }
+        @keyframes pulse {
+            0% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
 
-        .shape-2 {
-            bottom: -20%;
-            right: -10%;
-            animation-delay: -5s;
-        }
-
-        @keyframes float {
-
-            0%,
             100% {
-                transform: translate(0, 0);
-            }
-
-            50% {
-                transform: translate(30px, 50px);
+                opacity: 0.8;
+                transform: scale(1.1);
             }
         }
 
-        @keyframes fadeIn {
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .greeting {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .clock {
+            font-size: 5rem;
+            font-weight: 600;
+            letter-spacing: -2px;
+            line-height: 1;
+            background: linear-gradient(to bottom right, var(--text-color), var(--accent));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .date {
+            font-size: 1.2rem;
+            font-weight: 400;
+            opacity: 0.6;
+            margin-top: 0.5rem;
+        }
+
+        .quote-container {
+            margin-top: 1.5rem;
+            perspective: 1000px;
+        }
+
+        .quote {
+            font-style: italic;
+            opacity: 0.7;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: text;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .quote:hover,
+        .quote:focus {
+            background: var(--glass-bg);
+            opacity: 1;
+        }
+
+        .quote:empty:before {
+            content: "Type your motivation here...";
+            opacity: 0.5;
+        }
+
+        /* Search Bar */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-color);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .search-input:focus {
+            background: var(--glass-hover);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(170, 221, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            width: 100%;
+            max-width: 900px;
+            padding: 0 1rem;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        @media (min-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .category-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .category-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            text-decoration: none;
+            color: var(--text-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Anti-gravity hover effect */
+        .link-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: var(--glass-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            fill: var(--text-color);
+            transition: transform 0.3s ease;
+        }
+
+        .link-card:hover .link-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .link-text {
+            font-weight: 500;
+        }
+
+        /* Productivity Extras */
+        .focus-section {
+            margin-top: 4rem;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .focus-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+
+        .focus-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--glass-border);
+            color: var(--text-color);
+            font-size: 1.2rem;
+            text-align: center;
+            width: 300px;
+            padding: 0.5rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .focus-input:focus {
+            border-color: var(--accent);
+        }
+
+        /* Toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+            background: var(--glass-hover);
+        }
+
+        .theme-icon {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-color);
+        }
+
+        @keyframes fadeInDown {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(-20px);
             }
 
             to {
@@ -103,551 +308,262 @@
             }
         }
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        /* --- Theme Toggle --- */
-        .theme-toggle {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 0.5rem;
-            border-radius: 50%;
-            cursor: pointer;
-            color: var(--text-main);
-            transition: var(--transition);
-            backdrop-filter: blur(var(--glass-blur));
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(15deg) scale(1.1);
-        }
-
-        .theme-toggle svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* --- Header --- */
-        header {
-            text-align: center;
-            margin-top: 4vh;
-        }
-
-        .greeting {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.03em;
-        }
-
-        .clock-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        #clock {
-            font-size: 4rem;
-            font-weight: 200;
-            font-variant-numeric: tabular-nums;
-            line-height: 1;
-        }
-
-        #date {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        #quote-input {
-            margin-top: 1rem;
-            background: transparent;
-            border: none;
-            color: var(--accent);
-            text-align: center;
-            font-size: 1rem;
-            font-style: italic;
-            width: 100%;
-            outline: none;
-            opacity: 0.9;
-        }
-
-        /* --- Search --- */
-        .search-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .search-bar {
-            width: 100%;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 1rem 1.5rem 1rem 3.5rem;
-            /* Left padding for icon */
-            border-radius: 1.5rem;
-            font-size: 1.1rem;
-            color: var(--text-main);
-            backdrop-filter: blur(var(--glass-blur));
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            outline: none;
-        }
-
-        .search-bar::placeholder {
-            color: var(--text-muted);
-        }
-
-        .search-bar:focus {
-            box-shadow: 0 0 0 2px var(--accent), var(--shadow);
-            background: rgba(255, 255, 255, 0.05);
-            transform: scale(1.01);
-        }
-
-        [data-theme="light"] .search-bar:focus {
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 1.25rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 20px;
-            height: 20px;
-            color: var(--text-muted);
-            pointer-events: none;
-        }
-
-        /* --- Quick Links Grid --- */
-        .section-title {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .links-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .link-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 1.5rem 1rem;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 1rem;
-            text-decoration: none;
-            color: var(--text-main);
-            transition: var(--transition);
-            backdrop-filter: blur(var(--glass-blur));
-            position: relative;
-            overflow: hidden;
-        }
-
-        .link-card:hover {
-            transform: translateY(-5px);
-            background: var(--card-bg);
-            border-color: var(--accent);
-            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
-        }
-
-        .link-icon {
-            font-size: 32px;
-            color: currentColor;
-            transition: var(--transition);
-        }
-
-        .link-card:hover .link-icon {
-            color: var(--accent);
-            transform: scale(1.1);
-        }
-
-        .link-title {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* --- Productivity Section --- */
-        .productivity-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .widget {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            backdrop-filter: blur(var(--glass-blur));
-            display: flex;
-            flex-direction: column;
-        }
-
-        .widget h3 {
-            font-size: 1rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Todo List */
-        .todo-input-form {
-            display: flex;
-            margin-bottom: 1rem;
-        }
-
-        .todo-input {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.1);
-            border: none;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            color: var(--text-main);
-            outline: none;
-        }
-
-        [data-theme="light"] .todo-input {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .todo-list {
-            list-style: none;
-            flex: 1;
-            overflow-y: auto;
-            max-height: 200px;
-        }
-
-        .todo-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--card-border);
-            animation: fadeIn 0.3s ease;
-        }
-
-        .todo-item.completed span {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
-
-        .todo-checkbox {
-            cursor: pointer;
-            accent-color: var(--accent);
-        }
-
-        .delete-todo {
-            margin-left: auto;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1.2rem;
-            opacity: 0;
-            transition: 0.2s;
-        }
-
-        .todo-item:hover .delete-todo {
-            opacity: 1;
-        }
-
-        .delete-todo:hover {
-            color: #ef4444;
-        }
-
-        /* Notes & Focus */
-        .textarea-widget {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.1);
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            color: var(--text-main);
-            resize: none;
-            font-family: inherit;
-            outline: none;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        [data-theme="light"] .textarea-widget {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .focus-input {
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid var(--accent);
-            padding: 0.5rem 0;
-            font-size: 1.2rem;
-            color: var(--text-main);
-            text-align: center;
-            width: 100%;
-            outline: none;
-            font-weight: 500;
-        }
-
-        .focus-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .focus-label {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        /* --- Footer --- */
-        footer {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 2rem 0;
-            font-size: 0.9rem;
-            margin-top: auto;
-        }
-
-        /* --- Media Queries --- */
-        @media (max-width: 900px) {
-            .productivity-grid {
-                grid-template-columns: 1fr;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
 
-            .links-grid {
-                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
+        /* Responsive */
         @media (max-width: 600px) {
-            .greeting {
-                font-size: 2rem;
+            .clock {
+                font-size: 3.5rem;
             }
 
-            #clock {
-                font-size: 3rem;
+            .grid-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
 
-            .container {
-                padding: 1rem;
-                gap: 2rem;
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
             }
         }
     </style>
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
-    <div class="ambient-shape shape-1"></div>
-    <div class="ambient-shape shape-2"></div>
-    <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+
+    <div class="bg-gradient"></div>
+
+    <div class="theme-toggle" id="themeToggle" title="Toggle Light/Dark Mode">
         <!-- Sun Icon -->
-        <svg class="sun-icon" style="display: none;" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        <svg class="theme-icon" id="sunIcon" style="display: none;" viewBox="0 0 24 24">
+            <path
+                d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
         </svg>
         <!-- Moon Icon -->
-        <svg class="moon-icon" viewBox="0 0 24 24">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        <svg class="theme-icon" id="moonIcon" viewBox="0 0 24 24">
+            <path
+                d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
         </svg>
-    </button>
-    <div class="container">
-
-        <header>
-            <div class="greeting">Welcome back, Naman</div>
-            <div class="clock-container">
-                <div id="clock">00:00:00</div>
-                <div id="date">Loading date...</div>
-            </div>
-            <input type="text" id="quote-input" placeholder="Click to add a motivational quote..." spellcheck="false">
-        </header>
-        <section class="search-container">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" class="search-bar" id="search-bar" placeholder="Message google..." autocomplete="off"
-                autofocus>
-        </section>
-        <!-- Links Grid -->
-        <section>
-            <div class="section-title">Quick Links</div>
-            <div class="links-grid" id="links-grid">
-                <!-- Links will be populated by JS -->
-            </div>
-        </section>
-        
-        <footer>
-            <p>&copy; <span id="year"></span> Naman. <span id="footer-quote">Design is intelligence made visible.</span>
-            </p>
-        </footer>
     </div>
-    <script>
-        /* --- CONSTANTS & CONFIG --- */
-        const SOCIAL_LINKS = [
-            { title: "Instagram", url: "https://instagram.com", category: "social", iconClass: "bx bxl-instagram" },
-            { title: "X", url: "https://x.com", category: "social", iconClass: "bx bxl-twitter" }, // User asked for twitter-x but boxicons might use bxl-twitter or bxl-twitter with x specific class. Let's use bxl-twitter-x if exists or bxl-twitter. Checking user request: "bx-twitter-x" was in the prompt example.
-            { title: "LinkedIn", url: "https://linkedin.com", category: "social", iconClass: "bx bxl-linkedin" },
-            { title: "Gmail", url: "https://mail.google.com", category: "work", iconClass: "bx bxl-gmail" },
-            { title: "GitHub", url: "https://github.com", category: "work", iconClass: "bx bxl-github" },
-            { title: "ChatGPT", url: "https://chat.openai.com", category: "work", iconClass: "bx bxl-openai" },
-            { title: "YouTube", url: "https://youtube.com", category: "learning", iconClass: "bx bxl-youtube" },
-            { title: "Canva", url: "https://canva.com", category: "tools", iconClass: "bxl-canva" },
-        ];
-        /* --- STATE MANAGEMENT --- */
-        let todos = JSON.parse(localStorage.getItem('dashboard_todos')) || [];
-        let theme = localStorage.getItem('dashboard_theme') || 'dark';
-        /* --- INITIALIZATION --- */
-        document.addEventListener('DOMContentLoaded', () => {
-            initClock();
-            initTheme();
-            renderLinks();
-            renderTodos();
-            loadNotesAndFocus();
-            document.getElementById('year').textContent = new Date().getFullYear();
 
-            // Search Listener
-            document.getElementById('search-bar').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    const query = e.target.value;
-                    if (query) window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-                }
-            });
-            // Keyboard Shortcuts
-            document.addEventListener('keydown', (e) => {
-                // Focus search on '/'
-                if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-                    e.preventDefault();
-                    document.getElementById('search-bar').focus();
-                }
-            });
-            // Quote & Focus Inputs listeners
-            document.getElementById('quote-input').value = localStorage.getItem('dashboard_quote') || '';
-            document.getElementById('quote-input').addEventListener('input', (e) => localStorage.setItem('dashboard_quote', e.target.value));
-            document.getElementById('focus-input').addEventListener('input', (e) => localStorage.setItem('dashboard_focus', e.target.value));
-            document.getElementById('notepad').addEventListener('input', (e) => localStorage.setItem('dashboard_notes', e.target.value));
-        });
-        /* --- CLOCK & DATE --- */
-        function initClock() {
-            const update = () => {
-                const now = new Date();
-                document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour12: false });
-                document.getElementById('date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            };
-            update();
-            setInterval(update, 1000);
+    <header class="hero">
+        <div class="greeting" id="greeting">Welcome back</div>
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="date" id="date">Monday, 1 January 2026</div>
+        <div class="quote-container">
+            <div class="quote" id="quote" contenteditable="true" spellcheck="false">Stay hungry, stay foolish.</div>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <form action="https://www.google.com/search" method="GET" target="_self">
+            <input type="text" name="q" class="search-input" placeholder="Search Google..." autocomplete="off"
+                autofocus>
+        </form>
+    </div>
+
+    <main class="grid-container">
+        <!-- Social -->
+        <div class="category-column">
+            <div class="category-title">Social</div>
+            <a href="https://twitter.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                <div class="link-text">Twitter</div>
+            </a>
+            <a href="https://instagram.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+                <div class="link-text">Instagram</div>
+            </a>
+            <a href="https://linkedin.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                </svg>
+                <div class="link-text">LinkedIn</div>
+            </a>
+        </div>
+
+        <!-- Work -->
+        <div class="category-column">
+            <div class="category-title">Work</div>
+            <a href="https://github.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                </svg>
+                <div class="link-text">GitHub</div>
+            </a>
+            <a href="https://mail.google.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819v-5.818l-5.455-4.091-5.455 4.091v5.818h-3.819c-.904 0-1.636-.732-1.636-1.636v-13.909c0-.214.066-.425.187-.604l8.727-7.424c.732-.621 1.839-.621 2.571 0l8.727 7.424c.121.179.187.39.187.604z" />
+                </svg>
+                <div class="link-text">Gmail</div>
+            </a>
+            <a href="https://chat.openai.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M22.282 9.821a5.98 5.98 0 0 0-.516-4.91 6.045 6.045 0 0 0-6.509-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .511 4.911 6.045 6.045 0 0 0 6.514 2.9 6.065 6.065 0 0 0 10.29-2.181 5.985 5.985 0 0 0 3.996-2.9 6.046 6.046 0 0 0-.755-7.086zM8.258 5.176a4.346 4.346 0 0 1 5.586-.54l-.872 1.51-1.002-1.737a2.616 2.616 0 0 0-3.712-.008l-2.022 3.5.01-.018a4.325 4.325 0 0 1 2.012-2.707zm-7.616 7.683a4.352 4.352 0 0 1 1.159-5.498l.872 1.514-1.01 1.748a2.618 2.618 0 0 0 1.85 3.962l.02.001a4.335 4.335 0 0 1-2.891-1.727zm6.758 7.332a4.343 4.343 0 0 1-3.664-1.925l1.742-1.008 1.002 1.738a2.617 2.617 0 0 0 3.717.005l2.029-3.515.01.018a4.327 4.327 0 0 1-4.836.687zm11.238-2.585a4.353 4.353 0 0 1-5.592.536l.872-1.509 1.012 1.748a2.618 2.618 0 0 0 3.71.009l2.022-3.504-.01.018a4.326 4.326 0 0 1-2.014 2.702zm3.765-7.669a4.355 4.355 0 0 1-1.166 5.485l-.872-1.513 1.01-1.749a2.618 2.618 0 0 0-1.85-3.962l-.02-.001a4.334 4.334 0 0 1 2.898 1.74zm-6.02-3.804l-1.003 1.738a2.617 2.617 0 0 0-3.717-.005l-2.029 3.515-.01-.018a4.328 4.328 0 0 1 4.836-.687 4.344 4.344 0 0 1 3.665 1.925l-1.742 1.009zM12 13.738a1.738 1.738 0 1 1 0-3.476 1.738 1.738 0 0 1 0 3.476z" />
+                </svg>
+                <div class="link-text">ChatGPT</div>
+            </a>
+        </div>
+
+        <!-- Learning -->
+        <div class="category-column">
+            <div class="category-title">Learning</div>
+            <a href="https://youtube.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                </svg>
+                <div class="link-text">YouTube</div>
+            </a>
+            <a href="https://docs.google.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M14 0H4.5A2.5 2.5 0 0 0 2 2.5v19A2.5 2.5 0 0 0 4.5 24h15a2.5 2.5 0 0 0 2.5-2.5V8.5L14 0zm0 1.5L20.5 8H14V1.5zM4.5 22V2h8v8h8v12H4.5z" />
+                </svg>
+                <div class="link-text">Docs</div>
+            </a>
+            <a href="https://notion.so" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M11.96 0c.264 0 .584.072 1.152.48l9.048 6.504c.312.216.528.528.528.912v12.336c0 2.088-1.68 3.768-3.768 3.768H5.08A3.768 3.768 0 0 1 1.312 20.24V4.92c0-1.224.984-2.208 2.208-2.208h8.44zm.192 10.632l2.64 5.28c.192.36.048.816-.336 1.008-.384.192-.816.048-1.008-.336l-2.64-5.28-1.488 2.496c-.36.576.048 1.344.744 1.344h7.008c.552 0 1.008-.456 1.008-1.008 0-.192-.048-.384-.144-.552l-5.784-9.6c-.192-.312-.528-.48-.888-.432-.36.048-.672.288-.792.624L7.52 14.28c-.144.384.048.816.432.96.384.144.816-.048.96-.432l1.632-4.176 1.608 2.4z" />
+                </svg>
+                <div class="link-text">Notion</div>
+            </a>
+        </div>
+
+        <!-- Tools -->
+        <div class="category-column">
+            <div class="category-title">Tools</div>
+            <a href="https://canva.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M6.075 14.88c.8 1.3 4.2 8.4 12.1 4.5 5-2.5 5.2-9 1.7-12.7-3.9-4.2-11.8.8-11.5 8.9v.3c.1 1.6 4.3 9.2 12 5.9"
+                        style="fill:none;stroke:currentColor;stroke-width:2" />
+                </svg>
+                <div class="link-text">Canva</div>
+            </a>
+            <a href="https://figma.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M12 24c0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6 6-2.686 6-6zm0-12c0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6 6-2.686 6-6zm0 0c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6zm6 6c0 3.314 2.686 6 6 6s6-2.686 6-6-2.686-6-6-6-6 2.686-6 6zm0 0c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6z" />
+                </svg>
+                <div class="link-text">Figma</div>
+            </a>
+            <a href="https://drive.google.com" class="link-card" target="_blank">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M8.22 3.75L12 10.28H20.73L16.95 3.75H8.22ZM7.04 5.75L1.87 14.73L3.75 18H10.15L15.32 9L7.04 5.75ZM6.44 19.12L9 14.62L13.56 19.12H6.44ZM12 19.12H21.25L17.5 12.63L12 19.12Z" />
+                </svg>
+                <div class="link-text">Drive</div>
+            </a>
+        </div>
+    </main>
+
+    <div class="focus-section">
+        <label class="focus-label" for="focusInput">TODAY'S MAIN FOCUS</label>
+        <input type="text" id="focusInput" class="focus-input" placeholder="What are you working on?">
+    </div>
+
+    <script>
+        // DOM Elements
+        const clockEl = document.getElementById('clock');
+        const dateEl = document.getElementById('date');
+        const greetingEl = document.getElementById('greeting');
+        const quoteEl = document.getElementById('quote');
+        const focusInput = document.getElementById('focusInput');
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        // --- 1. Clock & Date ---
+        function updateTime() {
+            const now = new Date();
+
+            // Time
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+
+            // Date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            dateEl.textContent = now.toLocaleDateString('en-US', options);
+
+            // Greeting
+            greetingEl.textContent = "Welcome back";
         }
-        /* --- THEME --- */
-        function initTheme() {
-            document.documentElement.setAttribute('data-theme', theme);
-            updateThemeIcons();
-            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // --- 2. Persist Editable Content (Quote & Focus) ---
+        function saveContent() {
+            localStorage.setItem('userQuote', quoteEl.innerText);
+            localStorage.setItem('userFocus', focusInput.value);
         }
+
+        function loadContent() {
+            const savedQuote = localStorage.getItem('userQuote');
+            if (savedQuote) quoteEl.innerText = savedQuote;
+
+            const savedFocus = localStorage.getItem('userFocus');
+            if (savedFocus) focusInput.value = savedFocus;
+        }
+
+        quoteEl.addEventListener('input', saveContent);
+        focusInput.addEventListener('input', saveContent);
+
+        loadContent();
+
+        // --- 3. Theme Toggle ---
         function toggleTheme() {
-            theme = theme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('dashboard_theme', theme);
-            updateThemeIcons();
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            updateThemeIcon(newTheme);
         }
-        function updateThemeIcons() {
-            const sun = document.querySelector('.sun-icon');
-            const moon = document.querySelector('.moon-icon');
-            if (theme === 'dark') {
-                sun.style.display = 'block';
-                moon.style.display = 'none';
-            } else {
+
+        function updateThemeIcon(theme) {
+            const sun = document.getElementById('sunIcon');
+            const moon = document.getElementById('moonIcon');
+            if (theme === 'light') {
                 sun.style.display = 'none';
                 moon.style.display = 'block';
+            } else {
+                sun.style.display = 'block';
+                moon.style.display = 'none';
             }
         }
-        /* --- LINKS --- */
-        function renderLinks() {
-            const grid = document.getElementById('links-grid');
-            grid.innerHTML = SOCIAL_LINKS.map(link => `
-                <a href="${link.url}" class="link-card">
-                    <i class='link-icon ${link.iconClass}'></i>
-                    <span class="link-title">${link.title}</span>
-                </a>
-            `).join('');
 
-            // Allow adding a custom link via code comment instructions
-            // Users can edit the SOCIAL_LINKS array above.
-        }
-        /* --- TODOS --- */
-        function renderTodos() {
-            const list = document.getElementById('todo-list');
-            list.innerHTML = todos.map((todo, index) => `
-                <li class="todo-item ${todo.completed ? 'completed' : ''}">
-                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} onclick="toggleTodo(${index})">
-                    <span>${todo.text}</span>
-                    <button class="delete-todo" onclick="deleteTodo(${index})">&times;</button>
-                </li>
-            `).join('');
-            localStorage.setItem('dashboard_todos', JSON.stringify(todos));
-        }
-        function addTodo(e) {
-            e.preventDefault();
-            const input = document.getElementById('new-todo');
-            const text = input.value.trim();
-            if (text) {
-                todos.push({ text, completed: false });
-                input.value = '';
-                renderTodos();
-            }
-        }
-        function toggleTodo(index) {
-            todos[index].completed = !todos[index].completed;
-            renderTodos();
-        }
-        function deleteTodo(index) {
-            todos.splice(index, 1);
-            renderTodos();
-        }
-        /* --- NOTES & FOCUS --- */
-        function loadNotesAndFocus() {
-            document.getElementById('notepad').value = localStorage.getItem('dashboard_notes') || '';
-            document.getElementById('focus-input').value = localStorage.getItem('dashboard_focus') || '';
-        }
+        // Initialize Theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', toggleTheme);
+
     </script>
 </body>
 
